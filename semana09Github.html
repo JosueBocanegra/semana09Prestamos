@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Préstamo de Equipos</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f4f4f9; }
+        .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h2 { color: #333; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input, select { width: 100%; padding: 8px; box-sizing: border-box; }
+        button { background-color: #007BFF; color: white; border: none; padding: 10px 15px; cursor: pointer; border-radius: 4px; }
+        button:hover { background-color: #0056b3; }
+        table { width: 100%; margin-top: 20px; border-collapse: collapse; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Sistema de Préstamo de Equipos</h2>
+    
+    <!-- Formulario actual -->
+    <div class="form-group">
+        <label for="estudiante">Nombre del Estudiante:</label>
+        <input type="text" id="estudiante" placeholder="Ej. Ana Pérez">
+    </div>
+    
+    <div class="form-group">
+        <label for="equipo">Equipo Solicitado:</label>
+        <input type="text" id="equipo" placeholder="Ej. Laptop HP / Proyector">
+    </div>
+
+    <!-- TODO: Agregar campos para Fecha de Devolución y Estado del Préstamo -->
+
+    <button onclick="registrarPrestamo()">Registrar Préstamo</button>
+
+    <h3>Lista de Préstamos</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Estudiante</th>
+                <th>Equipo</th>
+                <!-- TODO: Agregar columnas de Fecha de Devolución y Estado -->
+            </tr>
+        </thead>
+        <tbody id="tablaPrestamos">
+            <!-- Los datos se insertarán aquí dinámicamente -->
+        </tbody>
+    </table>
+</div>
+
+<script>
+    let prestamos = [];
+
+    function registrarPrestamo() {
+        const estudiante = document.getElementById('estudiante').value;
+        const equipo = document.getElementById('equipo').value;
+
+        if (!estudiante || !equipo) {
+            alert("Por favor completa todos los campos.");
+            return;
+        }
+
+        const nuevoPrestamo = {
+            estudiante: estudiante,
+            equipo: equipo
+            // TODO: Agregar fechaDevolucion y estado aquí
+        };
+
+        prestamos.push(nuevoPrestamo);
+        mostrarPrestamos();
+        
+        // Limpiar campos
+        document.getElementById('estudiante').value = '';
+        document.getElementById('equipo').value = '';
+    }
+
+    function mostrarPrestamos() {
+        const tbody = document.getElementById('tablaPrestamos');
+        tbody.innerHTML = '';
+
+        prestamos.forEach((p, index) => {
+            const fila = `<tr>
+                <td>${p.estudiante}</td>
+                <td>${p.equipo}</td>
+                <!-- TODO: Mostrar fecha y estado -->
+            </tr>`;
+            tbody.innerHTML += fila;
+        });
+    }
+</script>
+
+</body>
+</html>
