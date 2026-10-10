@@ -6,7 +6,7 @@
     <title>Sistema de Préstamo de Equipos</title>
     <style>
         body { font-family: Arial, sans-serif; margin: 40px; background-color: #f4f4f9; }
-        .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        .container { max-width: 700px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
         h2 { color: #333; }
         .form-group { margin-bottom: 15px; }
         label { display: block; margin-bottom: 5px; font-weight: bold; }
@@ -16,6 +16,8 @@
         table { width: 100%; margin-top: 20px; border-collapse: collapse; }
         th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
         th { background-color: #f2f2f2; }
+        .badge-pendiente { color: #d9534f; font-weight: bold; }
+        .badge-devuelto { color: #5cb85c; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -23,7 +25,7 @@
 <div class="container">
     <h2>Sistema de Préstamo de Equipos</h2>
     
-    <!-- Formulario actual -->
+    <!-- Campos base -->
     <div class="form-group">
         <label for="estudiante">Nombre del Estudiante:</label>
         <input type="text" id="estudiante" placeholder="Ej. Ana Pérez">
@@ -34,7 +36,20 @@
         <input type="text" id="equipo" placeholder="Ej. Laptop HP / Proyector">
     </div>
 
-    <!-- TODO: Agregar campos para Fecha de Devolución y Estado del Préstamo -->
+    <!-- 📌 CAMBIO RAMA 1: Fecha de Devolución -->
+    <div class="form-group">
+        <label for="fechaDevolucion">Fecha de Devolución:</label>
+        <input type="date" id="fechaDevolucion">
+    </div>
+
+    <!-- 📌 CAMBIO RAMA 2: Estado del Préstamo -->
+    <div class="form-group">
+        <label for="estado">Estado del Préstamo:</label>
+        <select id="estado">
+            <option value="Pendiente">Pendiente</option>
+            <option value="Devuelto">Devuelto</option>
+        </select>
+    </div>
 
     <button onclick="registrarPrestamo()">Registrar Préstamo</button>
 
@@ -44,7 +59,8 @@
             <tr>
                 <th>Estudiante</th>
                 <th>Equipo</th>
-                <!-- TODO: Agregar columnas de Fecha de Devolución y Estado -->
+                <th>Fecha Devolución</th> <!-- Agregado -->
+                <th>Estado</th>           <!-- Agregado -->
             </tr>
         </thead>
         <tbody id="tablaPrestamos">
@@ -59,16 +75,21 @@
     function registrarPrestamo() {
         const estudiante = document.getElementById('estudiante').value;
         const equipo = document.getElementById('equipo').value;
+        
+        // 📌 Captura de las nuevas variables de ambas ramas
+        const fechaDevolucion = document.getElementById('fechaDevolucion').value;
+        const estado = document.getElementById('estado').value;
 
-        if (!estudiante || !equipo) {
-            alert("Por favor completa todos los campos.");
+        if (!estudiante || !equipo || !fechaDevolucion) {
+            alert("Por favor completa todos los campos obligatorios.");
             return;
         }
 
         const nuevoPrestamo = {
             estudiante: estudiante,
-            equipo: equipo
-            // TODO: Agregar fechaDevolucion y estado aquí
+            equipo: equipo,
+            fechaDevolucion: fechaDevolucion, // Integrado
+            estado: estado                     // Integrado
         };
 
         prestamos.push(nuevoPrestamo);
@@ -77,6 +98,8 @@
         // Limpiar campos
         document.getElementById('estudiante').value = '';
         document.getElementById('equipo').value = '';
+        document.getElementById('fechaDevolucion').value = '';
+        document.getElementById('estado').value = 'Pendiente';
     }
 
     function mostrarPrestamos() {
@@ -84,10 +107,14 @@
         tbody.innerHTML = '';
 
         prestamos.forEach((p, index) => {
+            // Estilo visual según el estado para darle un toque profesional
+            const claseEstado = p.estado === 'Pendiente' ? 'badge-pendiente' : 'badge-devuelto';
+
             const fila = `<tr>
                 <td>${p.estudiante}</td>
                 <td>${p.equipo}</td>
-                <!-- TODO: Mostrar fecha y estado -->
+                <td>${p.fechaDevolucion}</td>
+                <td><span class="${claseEstado}">${p.estado}</span></td>
             </tr>`;
             tbody.innerHTML += fila;
         });
